@@ -1,0 +1,221 @@
+<a routerLink="/employees">Go back</a>
+<div class="container">
+  <div class="row">
+    <div class="card col-md-12">
+      <div class="card-body">
+        <h5 class="card-title">{{ employee?.name }}</h5>
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </p>
+        <p>Phone: {{ employee?.phone }}</p>
+        <p>Email: {{ employee?.email }}</p>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#editEmployeeModal"
+          (click)="handleEditModalOpen()"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-toggle="modal"
+          data-bs-target="#deleteEmployeeModal"
+        >
+          Delete
+        </button>
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="editEmployeeModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Update Employee
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body" *ngIf="duplicateEmployee">
+                <!-- if you want html validation use ngNativeValidate in form tag -->
+                <form
+                  #updateEmployeeForm="ngForm"
+                  (ngSubmit)="handleUpdateEmployee(updateEmployeeForm)"
+                >
+                  <div class="form-group row mb-3">
+                    <label for="staticEmail" class="col-sm-2 col-form-label"
+                      >Name</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Enter name"
+                        name="empName"
+                        [(ngModel)]="duplicateEmployee.name"
+                        #name="ngModel"
+                        [ngClass]="{
+                          'is-invalid': name.touched && name.invalid
+                        }"
+                        required
+                      />
+                      <div class="invalid-feedback">Name is Required</div>
+                    </div>
+                  </div>
+                  <div class="form-group row mb-3">
+                    <label for="staticEmail" class="col-sm-2 col-form-label"
+                      >Phone</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Enter Phone"
+                        name="phone"
+                        [(ngModel)]="duplicateEmployee.phone"
+                        #phone="ngModel"
+                        minlength="10"
+                        maxlength="12"
+                        pattern="^[0-9]*$"
+                        [ngClass]="{
+                          'is-invalid': phone.touched && phone.invalid
+                        }"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        <div *ngIf="phone.errors?.['required']">
+                          Phone is Required
+                        </div>
+                        <!-- TODO: To validate phone number with minlength 10 -->
+                        <div *ngIf="phone.errors?.['minlength']">
+                          Phone Number must be at least 10 characters long.
+                        </div>
+                        <div *ngIf="phone.errors?.['maxlength']">
+                          Phone Number can have maxlength of 12 characters.
+                        </div>
+                        <div *ngIf="phone.errors?.['pattern']">
+                          Enter only Number
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row mb-3">
+                    <label for="staticEmail" class="col-sm-2 col-form-label"
+                      >Email</label
+                    >
+                    <div class="col-sm-10">
+                      <input
+                        type="email"
+                        class="form-control"
+                        placeholder="Enter Email"
+                        name="email"
+                        [(ngModel)]="duplicateEmployee.email"
+                        #email="ngModel"
+                        [ngClass]="{
+                          'is-invalid': email.touched && email.invalid
+                        }"
+                        required
+                        email
+                      />
+                      <div class="invalid-feedback">
+                        <div *ngIf="email.errors?.['required']">
+                          Email is Required
+                        </div>
+                        <div *ngIf="email.errors?.['email']">
+                          Email seems to be not valid
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <!-- TODO: Disable save changes button -->
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      data-bs-dismiss="modal"
+                      [disabled]="updateEmployeeForm.invalid"
+                    >
+                      Save changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="deleteEmployeeModal"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  Delete Employee
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <h5>Are you sure you want to delete?</h5>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-dismiss="modal"
+                  >
+                    No
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    (click)="handleDeleteEmployee()"
+                    data-bs-dismiss="modal"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- TODO: Show the loader /spinner-->
+      <div class="text-center" *ngIf="isLoading">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

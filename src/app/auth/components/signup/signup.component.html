@@ -1,0 +1,140 @@
+<div class="row">
+  <!-- Step 3: patchup form tag with the FormGroup in ts -->
+  <form
+    class="col-md-4 offset-md-4"
+    [formGroup]="signupForm"
+    (ngSubmit)="handleSignup()"
+  >
+    <h1 class="h3 mb-3 fw-normal">Please Signup</h1>
+    <div class="form-floating">
+      <!-- step 4: patchup form fields with the FormControl in ts -->
+      <!-- goto ts for step 5-->
+      <input
+        type="email"
+        class="form-control"
+        id="floatingInput"
+        formControlName="email"
+        placeholder="name@example.com"
+        [ngClass]="{
+          'is-invalid':
+            signupForm.get('email')?.touched && signupForm.get('email')?.invalid
+        }"
+      />
+      <!-- step6: displaying validation related msg -->
+      <!-- email validation msg -->
+      <div class="invalid-feedback">
+        <div
+          id="emailRequired"
+          *ngIf="signupForm.get('email')?.errors?.['required']"
+        >
+          Email is required
+        </div>
+        <div
+          id="invalidEmail"
+          *ngIf="signupForm.get('email')?.errors?.['email']"
+        >
+          Email seems to be not valid
+        </div>
+      </div>
+      <label for="floatingInput">Email address</label>
+    </div>
+
+    <div class="form-floating">
+      <input
+        type="password"
+        class="form-control"
+        id="floatingPassword"
+        formControlName="password"
+        placeholder="Password"
+        name="password"
+        [ngClass]="{
+          'is-invalid':
+            signupForm.get('password')?.touched &&
+            signupForm.get('password')?.invalid
+        }"
+      />
+      <!-- password validation msg -->
+      <div class="invalid-feedback">
+        <div
+          id="passwordRequired"
+          *ngIf="signupForm.get('password')?.errors?.['required']"
+        >
+          Password is required
+        </div>
+        <div
+          id="passwordMinLength"
+          *ngIf="signupForm.get('password')?.errors?.['minlength']"
+        >
+          Password should have minimum 6 characters
+        </div>
+        <!-- validation for password strength -->
+        <div
+          *ngIf="signupForm.get('password')?.errors?.['passwordStrength'] && !signupForm.get('password')?.errors?.['minlength']"
+        >
+          Password must have lower case, upper case and numeric characters.
+        </div>
+      </div>
+      <label for="floatingPassword">Password</label>
+    </div>
+
+    <div class="form-floating">
+      <input
+        type="password"
+        class="form-control"
+        id="floatingPassword1"
+        formControlName="confirmPassword"
+        placeholder="Password"
+        name="confirmPassword"
+        [ngClass]="{
+          'is-invalid':
+            signupForm.get('password')?.touched &&
+            signupForm.get('password')?.invalid
+        }"
+      />
+      <!-- confirm password validation -->
+      <div class="invalid-feedback">
+        <div
+          id="confirmPasswordRequired"
+          *ngIf="signupForm.get('confirmPassword')?.errors?.['required']"
+        >
+          Confirm Password is required
+        </div>
+        <div
+          id="confirmPasswordMinLength"
+          *ngIf="signupForm.get('confirmPassword')?.errors?.['minlength']"
+        >
+          Confirm Password should have minimum 6 characters
+        </div>
+        <!-- validation for password strength -->
+        <div
+          *ngIf="signupForm.get('confirmPassword')?.errors?.['passwordStrength'] && 
+          !signupForm.get('confirmPassword')?.errors?.['minlength']" 
+        >
+          Password must have lower case, upper case and numeric characters.
+        </div>
+        <!-- validation for password mismatch -->
+        <div
+          *ngIf="signupForm.errors?.['passwordMismatchError'] && !signupForm.get('confirmPassword')?.errors?.['passwordStrength'] 
+          && !signupForm.get('confirmPassword')?.errors?.['minlength']"
+        >
+          Password does not match
+        </div>
+      </div>
+      <label for="floatingPassword1">Confirm Password</label>
+    </div>
+
+    <!-- disabling the button if form is invalid -->
+    <button
+      class="w-100 btn btn-lg btn-primary"
+      type="submit"
+      [disabled]="signupForm.invalid"
+    >
+      Signup
+    </button>
+
+    <div class="mt-3">
+      <p>Already Registered?</p>
+      <a routerLink="/auth/login">Login Now </a>
+    </div>
+  </form>
+</div>

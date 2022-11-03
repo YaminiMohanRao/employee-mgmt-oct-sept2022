@@ -1,0 +1,302 @@
+<div class="container-fluid mt-3">
+  <p>Data received from Child Comp: {{ dataReceivedFromChildComp?.name }}</p>
+  <p>Message From Child Component : {{ dataAccessedFromChild }}</p>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a
+        class="nav-item nav-link active"
+        data-bs-toggle="tab"
+        data-bs-target="#basic-databinding"
+        role="tab"
+        aria-controls="basic-databinding"
+        aria-selected="true"
+        >Basic Data Binding</a
+      >
+      <a
+        class="nav-item nav-link"
+        data-bs-toggle="tab"
+        data-bs-target="#cpb-databinding"
+        role="tab"
+        aria-controls="cpb-databinding"
+        aria-selected="true"
+        >Custom Property Binding</a
+      >
+      <a
+        class="nav-item nav-link"
+        data-bs-toggle="tab"
+        data-bs-target="#ceb-databinding"
+        role="tab"
+        aria-controls="ceb-databinding"
+        aria-selected="true"
+        >Custom Event Binding</a
+      >
+      <a
+        class="nav-item nav-link"
+        data-bs-toggle="tab"
+        data-bs-target="#directives-tab"
+        role="tab"
+        aria-controls="directives-tab"
+        aria-selected="false"
+        >Directives</a
+      >
+      <a
+        class="nav-item nav-link"
+        data-bs-toggle="tab"
+        data-bs-target="#pipes-tab"
+        role="tab"
+        aria-controls="pipes-tab"
+        aria-selected="false"
+        >Pipes</a
+      >
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div
+      class="tab-pane fade show active"
+      id="basic-databinding"
+      role="tabpanel"
+      aria-labelledby="basic-databinding-tab"
+    >
+      <h2>Basic Data Binding</h2>
+      <h3>Interpolation</h3>
+      <p>App Name : {{ appName }}</p>
+      <input type="text" value="{{ companyProfile.name }}" />
+      <div title="{{ companyProfile.employeesCount }}">
+        Mouseover to see employees count
+      </div>
+
+      <hr />
+      <h3>Property Binding</h3>
+      Team size: <input type="text" [value]="teamSize" />
+      <div [title]="teamSize">Mouseover to see the Team Size</div>
+
+      <hr />
+      <h3>Event Binding</h3>
+      <button (click)="handleClickMe($event)">Click Me</button>
+
+      <hr />
+      <h3>Two way Binding</h3>
+      <p>{{ courseName }}</p>
+      <input type="text" value="{{ courseName }}" /><br />
+      <input type="text" [value]="courseName" /><br /><br />
+      <input type="text" [(ngModel)]="courseName" />
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="cpb-databinding"
+      role="tabpanel"
+      aria-labelledby="cpb-databinding-tab"
+    >
+      <h2>Parent to Child Comp Communication using Custom Property Binding</h2>
+      <app-cpb></app-cpb>
+      <!-- step4: pass the data thru the age property -->
+      <app-cpb [age]="10"></app-cpb>
+      <app-cpb [age]="50"></app-cpb>
+      <app-cpb [age]="myAge"></app-cpb>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="ceb-databinding"
+      role="tabpanel"
+      aria-labelledby="ceb-databinding-tab"
+    >
+      <h2>Child to Parent Comp Communication using Custom Event Binding</h2>
+      <!-- Step 4 of CEB: Let's add an event handler to the custom event -->
+      <!-- step 5 of CEB: let's get the data thru $event -->
+      <app-ceb (profileLoaded)="handleProfileLoaded($event)"></app-ceb>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="directives-tab"
+      role="tabpanel"
+      aria-labelledby="directives-tab"
+    >
+      <h2>Directives</h2>
+      <pre>
+        Directives 
+          --
+          * Special Instructions to the DOM 
+          * useful for altering apperance and behvaiour of an existing element
+          1. Components -- (are also directives only )
+              Used with a template. This type of directive is the most common directive type.
+          2. Attribute Directives 
+              Example: routerLink, routerLinkActive, ngModel, ngClass, ngStyle, ngForm, ngNativeValidate
+          3. Structural Directives
+              * the impact will be in structural layer (html)
+              *ngIf, *ngFor, ngSwitch 
+          4. Custom Attribute Directives 
+          5. Custom Structural Directives 
+      </pre>
+      <h3>[ngStyle] Demo</h3>
+      <div
+        [ngStyle]="{
+          color: 'green',
+          'font-size': '20px',
+          'font-weight': 'bold',
+          'background-color': 'yellow',
+          'font-family': 'Times New Roman'
+        }"
+      >
+        This div has ngStyle attribute directive
+      </div>
+
+      <h3>Structural Directive</h3>
+      <h4>*ngIf Demo</h4>
+      <div class="alert alert-success" *ngIf="isLoggedIn; else loggedOut">
+        You are Logged in! you can use premium features of the app
+      </div>
+      <ng-template #loggedOut>
+        <div class="alert alert-danger">
+          Please login to access premium features of the app
+        </div>
+      </ng-template>
+
+      <h4>*ngFor Demo</h4>
+      <ul>
+        <li *ngFor="let skill of skills; let i = index">
+          <span *ngIf="skill !== 'NodeJs'">{{ i + 1 }} . {{ skill }}</span>
+        </li>
+      </ul>
+
+      <h4>ngSwitch Demo</h4>
+
+      Day : <input type="number" [(ngModel)]="day" />
+      <div [ngSwitch]="day">
+        <div *ngSwitchCase="0"><h3>Today is Sunday!</h3></div>
+        <div *ngSwitchCase="1"><h3>Today is Monday</h3></div>
+        <div *ngSwitchCase="2"><h3>Today is Tuesday</h3></div>
+        <div *ngSwitchCase="3">
+          <h3>Today is Wednesday</h3>
+        </div>
+        <div *ngSwitchCase="4"><h3>Today is Thursday</h3></div>
+        <div *ngSwitchCase="5"><h3>Today is Friday</h3></div>
+        <div *ngSwitchCase="6">
+          <h3>Today is Saturday</h3>
+        </div>
+        <div *ngSwitchDefault><h3>Invalid Day</h3></div>
+      </div>
+
+      <hr />
+      <h4>Custom Attribute Directive - Demo</h4>
+      <div data-testid="colorizerWrapper" appColorizer>Random Text .....</div>
+      <hr />
+
+      <h4>Custom Structual Directive - Demo</h4>
+      <div *appDemoIf="isLoggedIn">
+        <div class="alert alert-success">You are logged in</div>
+      </div>
+      <div *appDemoIf="!isLoggedIn">
+        <div class="alert alert-danger">Pls login.</div>
+      </div>
+
+      <h4>Custom Structural Directive - Demo of unless</h4>
+      <div *appUnless="isLoggedIn">
+        <button class="btn btn-danger">Logout</button>
+      </div>
+      <div *appUnless="!isLoggedIn">
+        <button class="btn btn-success">Login</button>
+      </div>
+      <hr />
+      <h4>ngTemplateOutlet</h4>
+      <ng-template #template1>
+        <p>This is our template. It will be displayed in ng-container</p>
+      </ng-template>
+
+      <p>The Template appears after this</p>
+      <!-- 
+        We want to render the above template here.
+        Hence we use the ngTemplateOutlet directive 
+        Assign template1 to ngTemplateOutlet
+      -->
+      <ng-container *ngTemplateOutlet="template1">
+        This text is not displayed
+      </ng-container>
+
+      <ng-template let-value="value" #messageTemplate>
+        <p>Value Received from the Parent is {{ value }}</p>
+      </ng-template>
+
+      <ng-container
+        [ngTemplateOutlet]="messageTemplate"
+        [ngTemplateOutletContext]="{ value: '1000' }"
+      >
+      </ng-container>
+
+      <h3>ng-container, ngTemplateOutlet and ng-template</h3>
+
+      <!-- random in the following will refer to $implicit in myContext -->
+      <ng-template #eng1 let-random>
+        <span>Hello {{ random }}!</span>
+      </ng-template>
+      <ng-template #eng2 let-myAge="age">
+        <span>You are {{ myAge }}!</span>
+      </ng-template>
+      <ng-template #italian let-personName="name">
+        <span>Hola {{ personName }}!</span>
+      </ng-template>
+      <!-- Refer: concepts.comp.ts also for a variable myContext -->
+      
+      <ng-container *ngTemplateOutlet="eng1; context: myContext"></ng-container>
+      <hr />
+      <ng-container *ngTemplateOutlet="eng2; context: myContext"></ng-container>
+      <hr />
+      <ng-container
+        *ngTemplateOutlet="italian; context: myContext"
+      ></ng-container>
+      <hr />
+
+      <h4>Alternative Syntax is here</h4>
+      <ng-template let-person="person" #welcomeTemplate>
+        <p>Dear {{ person.name }} , {{ person.message }}</p>
+      </ng-template>
+
+      <ng-container
+        [ngTemplateOutlet]="welcomeTemplate"
+        [ngTemplateOutletContext]="{
+          person: { name: 'Guest', message: 'Welcome to our site' }
+        }"
+      >
+        <!-- you can have the above obj in Ts also. -->
+      </ng-container>
+      <ng-container
+        [ngTemplateOutlet]="welcomeTemplate"
+        [ngTemplateOutletContext]="{
+          person: { name: 'John', message: 'Your Trial plan will end Today!' }
+        }"
+      >
+      </ng-container>
+    </div>
+
+    <div
+      class="tab-pane fade"
+      id="pipes-tab"
+      role="tabpanel"
+      aria-labelledby="pipes-tab"
+    >
+      <h2>Pipes - Demo</h2>
+      <h3>Built-in Pipes</h3>
+      <p>{{ dummyText }}</p>
+      <p>{{ dummyText | lowercase }}</p>
+      <p>{{ dummyText | uppercase }}</p>
+      <hr />
+      <p>{{ today }}</p>
+      <p>{{ today | date }}</p>
+      <!-- the following parameterized pipes -->
+      <p>{{ today | date: "dd-MMM-YYYY" }}</p>
+      <!-- chaining pipe -->
+      <p>{{ today | date: "MMM dd,yyyy hh:mm:ss a" | lowercase }}</p>
+      <hr />
+      <h3>Custom Pipes</h3>
+      <p>{{ dummyText | ellipsis }}</p>
+      <p>{{ dummyText | ellipsis: 50 }}</p>
+      <hr>
+      <h3>JSON PIPE</h3>
+      <div>{{ book }}</div> 
+      <div>{{ book | json }}</div>
+      <h3>Async Pipe</h3>
+    </div>
+  </div>
+</div>
